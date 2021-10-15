@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { setCalculations } from '../redux/user/user.actions'
 import { connect } from "react-redux";
 
-function Calculate({x, setCalculations, calculations}) {
+const Calculate = ({x, setCalculations, calculations, userName}) => {
     const [variable, setVariable] = useState()
     const [answer, setAnswer] = useState([])
 
@@ -51,7 +51,7 @@ function Calculate({x, setCalculations, calculations}) {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    name: "debugged", 
+                    name: userName, 
                     entries: calculations,
                     number: x
                 })
@@ -61,7 +61,7 @@ function Calculate({x, setCalculations, calculations}) {
             })
         }
         console.log("calculations",calculations)
-    }, [calculations])
+    }, [x])
 
    return null 
 }
@@ -71,5 +71,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const mapStateToProps = (state) => ({
     calculations: state.user.calculations,
+    userName: state.user.userName,
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Calculate);

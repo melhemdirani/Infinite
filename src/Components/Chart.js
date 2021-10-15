@@ -1,19 +1,30 @@
 import React, {useEffect, useState} from 'react';
 import {Line} from 'react-chartjs-2';
 import { connect } from 'react-redux';
+import { setIterations } from '../redux/user/user.actions';
 
 
 
-const Chart = ({calculations}) => {
- const [labelArray, setLabelArray] = useState([]) 
+const Chart = ({calculations,dataArray, setIterations}) => {
+  const [arrays,setArrays] = useState([])
+  const [labelArray, setLabelArray] = useState([]) 
   useEffect(() => {
-    let N = calculations.length
+    setArrays(calculations)
+  }, [calculations])
+  useEffect(() => {
+    setArrays(dataArray)
+  }, [dataArray])
+  useEffect(() => {
+    setIterations((arrays.length - 1))
+  }, [arrays])
+  useEffect(() => {
+    let N = arrays.length
     let arr = Array.from({ length: N }, (_, i) => i+1)
       setLabelArray(arr)
-  }, [calculations])
+  }, [arrays])
   const state = {
     labels: labelArray,
-    datasets: [
+    datasets: [ 
       {
           label: "result",
           fill: false,
@@ -21,7 +32,7 @@ const Chart = ({calculations}) => {
           backgroundColor: 'rgba(75,192,192,1)',
           borderColor: 'rgba(0,0,0,1)',
           borderWidth: 1,
-          data: calculations
+          data: arrays
       }
     ]
   }
@@ -44,8 +55,12 @@ const Chart = ({calculations}) => {
       </div>
     );
 }
-
+const mapDispatchToProps = (dispatch) => ({
+  setIterations: (i) => dispatch(setIterations(i)),
+});
 const mapStateToProps = (state) => ({
   calculations: state.user.calculations,
 });
-export default connect(mapStateToProps)(Chart);
+export default connect(mapStateToProps,mapDispatchToProps)(Chart);
+
+

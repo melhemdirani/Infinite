@@ -1,5 +1,7 @@
 const INITIAL_STATE = {
-  calculations: []
+  calculations: [],
+  iterations: "",
+  userName: ""
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -8,6 +10,18 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         calculations: action.payload,
+        error: null
+      };
+    case 'SET_ITERATIONS':
+      return {
+        ...state,
+        iterations: action.payload,
+        error: null
+      };
+    case 'SET_USERNAME':
+      return {
+        ...state,
+        userName: action.payload,
         error: null
       };
     default:
